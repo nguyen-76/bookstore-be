@@ -1,12 +1,12 @@
-var express = require("express");
 var path = require("path");
+
+require("dotenv").config({ path: path.join(__dirname, ".env") });
+var express = require("express");
+const cors = require("cors");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-
+const port = process.env.PORT;
 var indexRouter = require("./routes/index");
-
-require("dotenv").config();
-const cors = require("cors");
 
 var app = express();
 
@@ -15,9 +15,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
 
 app.use("/", indexRouter);
-app.use(cors());
+
 //catch when when request match no route
 app.use((req, res, next) => {
   const exception = new Error(`Path not found`);
